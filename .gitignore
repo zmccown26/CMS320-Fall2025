@@ -1,0 +1,62 @@
+# Unity generated files
+[Ll]ibrary/
+[Tt]emp/
+[Oo]bj/
+[Bb]uild/
+[Bb]uilds/
+[Ll]ogs/
+[Mm]emoryCaptures/
+
+# Unity cache and auto-generated
+UserSettings/
+Assets/AssetStoreTools*
+Assets/StreamingAssets/aa.meta
+
+# Visual Studio / Rider
+.vscode/
+.vs/
+*.csproj
+*.sln
+*.suo
+*.user
+*.userprefs
+*.pidb
+*.booproj
+*.svd
+*.pdb
+*.mdb
+*.opendb
+*.VC.db
+*.ide/
+.idea/
+
+# Crashlytics
+crashlytics-build.properties
+fabric.properties
+
+# Gradle / Android
+.gradle/
+*.apk
+*.aab
+*.unitypackage
+
+# iOS
+DerivedData/
+
+# OS generated
+.DS_Store
+Thumbs.db
+
+# Package manager
+Packages/packages-lock.json
+
+# Addressables
+Library/com.unity.addressables
+
+# Lightmaps & GI cache
+[Ll]ibrary/GI*/
+
+# Builds (if you keep specific build dirs checked in, remove from above)
+Build/**
+Builds/**
+
