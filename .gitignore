@@ -12,6 +12,9 @@ UserSettings/
 Assets/AssetStoreTools*
 Assets/StreamingAssets/aa.meta
 
+# Version control systems
+.plastic/
+
 # Visual Studio / Rider
 .vscode/
 .vs/
