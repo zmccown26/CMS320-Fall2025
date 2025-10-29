@@ -1,4 +1,0 @@
-repository "Heli Hero/Heli Hero@2475877937969@cloud"
-  path "/"
-    br "/main"
-    co "/main"
