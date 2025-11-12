@@ -120,7 +120,7 @@ public class Lander : MonoBehaviour {
     }
 
     public float GetSpeedX() {
-        return landerRigidbody2D.LinearVelocityX
+        return landerRigidbody2D.LinearVelocityX;
     }
 
     public float GetSpeedY() {

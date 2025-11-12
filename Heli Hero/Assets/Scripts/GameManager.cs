@@ -6,7 +6,7 @@ public class GameManager : MonoBehaviour
 public static GameManager Instance { get; private set; }
 
 private int score;
-prive float time;
+private float time;
 
 private void Awake(){
    instance = this;
