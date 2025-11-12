@@ -27,7 +27,9 @@ public class Lander : MonoBehaviour {
     }
 
     private void FixedUpdate() {
-
+        if (landerRigidbody2D == null) {
+            return;
+        }
 
         if(fuelAmount <= 0f){
             Debug.Log("No fuel");
@@ -120,10 +122,16 @@ public class Lander : MonoBehaviour {
     }
 
     public float GetSpeedX() {
-        return landerRigidbody2D.LinearVelocityX;
+        if (landerRigidbody2D == null) {
+            return 0f;
+        }
+        return landerRigidbody2D.linearVelocity.x;
     }
 
     public float GetSpeedY() {
-        return landerRigidbody2D.linearVelocityY;
+        if (landerRigidbody2D == null) {
+            return 0f;
+        }
+        return landerRigidbody2D.linearVelocity.y;
     }
 }

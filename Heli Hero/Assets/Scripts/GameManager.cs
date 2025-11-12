@@ -9,7 +9,7 @@ private int score;
 private float time;
 
 private void Awake(){
-   instance = this;
+   Instance = this;
 }
 
 private void Start(){
