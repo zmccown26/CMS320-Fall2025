@@ -3,13 +3,22 @@ using UnityEngine;
 public class GameManager : MonoBehaviour
 {
 
- private int score;
+public static GameManager Instance { get; private set; }
 
+private int score;
+prive float time;
+
+private void Awake(){
+   instance = this;
+}
 
 private void Start(){
    Lander.Instance.OnCoinPickup += Lander_OnCoinPickup;
    Lander.Instance.OnLanded += Lander_OnLanded;
+}
 
+private void Update(){
+   time += Time.deltaTime;
 }
 
  public void Lander_OnLanded(object sender, Lander.OnLandedEventArgs e){
@@ -25,6 +34,14 @@ private void Lander_OnCoinPickup(object sender, System.EventArgs e){
  {
     score += addScoreAmount;
     Debug.Log("Coin picked up! Score: " + score);
+ }
+
+ public int GetScore() {
+   return score;
+ }
+
+ public float GetTime() {
+   return time;
  }
 
 }
