@@ -32,7 +32,6 @@ public class Lander : MonoBehaviour {
         }
 
         if(fuelAmount <= 0f){
-            Debug.Log("No fuel");
             return;
         }
 
