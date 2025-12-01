@@ -4,6 +4,10 @@ using TMPro;
 public class StatsUI : MonoBehaviour
 {
     [SerializeField] private TextMeshProUGUI statsTextMesh;
+    [SerializeField] private GameObject speedUpArrowGameObject;
+    [SerializeField] private GameObject speedDownArrowGameObject;
+    [SerializeField] private GameObject speedLeftArrowGameObject;
+    [SerializeField] private GameObject speedRightArrowGameObject;
 
     private void Update() {
         UpdateStatsTextMesh();
@@ -11,6 +15,12 @@ public class StatsUI : MonoBehaviour
 
         
     private void UpdateStatsTextMesh() {
+
+        speedUpArrowGameObject.SetActive(Lander.Instance.GetSpeedY() >= 0);
+        speedDownArrowGameObject.SetActive(Lander.Instance.GetSpeedY() < 0);
+        speedLeftArrowGameObject.SetActive(Lander.Instance.GetSpeedX() < 0);
+        speedRightArrowGameObject.SetActive(Lander.Instance.GetSpeedX() >= 0);
+
         if (statsTextMesh == null) {
             return;
         }
