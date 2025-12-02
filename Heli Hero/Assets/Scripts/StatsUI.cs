@@ -1,5 +1,6 @@
 using UnityEngine;
 using TMPro;
+using UnityEngine.UI;
 
 public class StatsUI : MonoBehaviour
 {
@@ -8,6 +9,7 @@ public class StatsUI : MonoBehaviour
     [SerializeField] private GameObject speedDownArrowGameObject;
     [SerializeField] private GameObject speedLeftArrowGameObject;
     [SerializeField] private GameObject speedRightArrowGameObject;
+    [SerializeField] private Image fuelImage;
 
     private void Update() {
         UpdateStatsTextMesh();
@@ -21,6 +23,8 @@ public class StatsUI : MonoBehaviour
         speedLeftArrowGameObject.SetActive(Lander.Instance.GetSpeedX() < 0);
         speedRightArrowGameObject.SetActive(Lander.Instance.GetSpeedX() >= 0);
 
+        fuelImage.fillAmount = Lander.Instance.GetFuelAmountNormalized();
+
         if (statsTextMesh == null) {
             return;
         }
@@ -28,12 +32,11 @@ public class StatsUI : MonoBehaviour
         if (GameManager.Instance == null || Lander.Instance == null) {
             return;
         }
-        
+
         statsTextMesh.text = 
         GameManager.Instance.GetScore() + "\n" +
         Mathf.Round(GameManager.Instance.GetTime()) + "\n" +
         Mathf.Abs(Mathf.Round(Lander.Instance.GetSpeedX() * 10f)) + "\n" +
-        Mathf.Abs(Mathf.Round(Lander.Instance.GetSpeedY() * 10f)) + "\n" +
-        Lander.Instance.GetFuelAmount();
+        Mathf.Abs(Mathf.Round(Lander.Instance.GetSpeedY() * 10f));
     }
 }
