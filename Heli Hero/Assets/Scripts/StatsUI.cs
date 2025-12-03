@@ -44,6 +44,8 @@ public class StatsUI : MonoBehaviour
             return;
         }
 
+        fuelImage.fillAmount = Lander.Instance.GetFuelAmountNormalized();
+
         statsTextMesh.text = 
         GameManager.Instance.GetScore() + "\n" +
         Mathf.Round(GameManager.Instance.GetTime()) + "\n" +
