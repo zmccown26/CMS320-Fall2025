@@ -15,11 +15,12 @@ public class LanderVisual : MonoBehaviour {
     private void Lander_OnLanded(object sender, Lander.OnLandedEventArgs e) {
         switch (e.landingType) {
             case Lander.LandingType.TooFastLanding:
-                break;
             case Lander.LandingType.TooSteepAngle:
-                break;
             case Lander.LandingType.WrongLandingArea:
-                Instantiate(landerExplosionVfx, transform.position, Quaternion.identity);
+            //crash!
+                GameObject explosion = Instantiate(landerExplosionVfx, transform.position, Quaternion.identity);
+                ParticleSystem ps = explosion.GetComponent<ParticleSystem>();
+                ps.Play();
                 gameObject.SetActive(false);
                 break;
         }
