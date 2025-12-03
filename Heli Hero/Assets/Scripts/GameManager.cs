@@ -7,6 +7,7 @@ public static GameManager Instance { get; private set; }
 
 private int score;
 private float time;
+private bool isTimerActive;
 
 private void Awake(){
    Instance = this;
@@ -15,10 +16,17 @@ private void Awake(){
 private void Start(){
    Lander.Instance.OnCoinPickup += Lander_OnCoinPickup;
    Lander.Instance.OnLanded += Lander_OnLanded;
+   Lander.Instance.OnStateChanged += Lander_OnStateChanged;
+}
+
+private void Lander_OnStateChanged(object sender, Lander.OnStateChangedEventArgs e){
+   isTimerActive = e.state == Lander.State.Normal;
 }
 
 private void Update(){
-   time += Time.deltaTime;
+   if(isTimerActive){
+      time += Time.deltaTime;
+   }
 }
 
  public void Lander_OnLanded(object sender, Lander.OnLandedEventArgs e){
