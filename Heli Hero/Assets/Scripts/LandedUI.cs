@@ -1,3 +1,4 @@
+using System;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -7,11 +8,16 @@ public class LandedUI : MonoBehaviour {
 
     [SerializeField] private TextMeshProUGUI titleTextMesh;
     [SerializeField] private TextMeshProUGUI statsTextMesh;
+    [SerializeField] private TextMeshProUGUI nextButtonTextMesh;
     [SerializeField] private Button nextButton;
+
+
+    private Action nextButtonClickAction;
+
 
     private void Awake() {
         nextButton.onClick.AddListener(() => {
-        SceneManager.LoadScene(0);
+            nextButtonClickAction();
         });
     }
 
@@ -25,8 +31,12 @@ public class LandedUI : MonoBehaviour {
     private void Lander_OnLanded(object sender, Lander.OnLandedEventArgs e) {
         if (e.landingType == Lander.LandingType.Success) {
             titleTextMesh.text = "SUCCESSFUL LANDING!";
+            nextButtonTextMesh.text = "NEXT LEVEL";
+            nextButtonClickAction = GameManager.Instance.GoToNextLevel;
         } else {
             titleTextMesh.text = "<color=#ff0000>CRASH!</color>";
+            nextButtonTextMesh.text = "RETRY LEVEL";
+            nextButtonClickAction = GameManager.Instance.RetryLevel;
         }
 
         statsTextMesh.text =

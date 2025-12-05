@@ -1,12 +1,17 @@
 using System;
 using UnityEngine;
-
-public class GameManager : MonoBehaviour
-{
+using UnityEngine.SceneManagement;
+using System.Collections.Generic;
+public class GameManager : MonoBehaviour {
 
 public static GameManager Instance { get; private set; }
 
-//private static int levelNumber = 1;
+
+[SerializeField] private List<GameLevel> gameLevelList;
+
+
+private static int levelNumber =1;
+
 
 public event System.EventHandler OnGamePaused;
 public event System.EventHandler OnGameResumed;
@@ -25,7 +30,7 @@ private void Start(){
    Lander.Instance.OnStateChanged += Lander_OnStateChanged;
 
    GameInput.Instance.OnMenuButtonPressed += GameInput_OnMenuButtonPressed;
-   //LoadCurrentScene();
+   LoadCurrentScene();
 }
 
 private void GameInput_OnMenuButtonPressed(object sender, System.EventArgs e){
@@ -39,6 +44,16 @@ private void Lander_OnStateChanged(object sender, Lander.OnStateChangedEventArgs
 private void Update(){
    if(isTimerActive){
       time += Time.deltaTime;
+   }
+}
+
+private void LoadCurrentScene(){
+   foreach(GameLevel gameLevel in gameLevelList){
+      if(gameLevel.GetLevelNumber() == levelNumber){
+         
+         GameLevel spawnedGameLevel = Instantiate(gameLevel, Vector3.zero, Quaternion.identity);
+         Lander.Instance.transform.position = spawnedGameLevel.GetLanderStartPosition();
+      }
    }
 }
 
@@ -65,18 +80,18 @@ private void Lander_OnCoinPickup(object sender, System.EventArgs e){
    return time;
  }
 
-//public void GoToNextLevel() {
-  // levelNumber++;
-  // SceneLoader.LoadScene(SceneLoader.Scene.Level_01);
-//}
-
-public void RetryLevel() {
-   SceneLoader.LoadScene(SceneLoader.Scene.Level_01);
+public void GoToNextLevel() {
+   levelNumber++;
+   SceneManager.LoadScene(0);
 }
 
-//public int GetLevelNumber() {
-  // return levelNumber;
-//}
+public void RetryLevel() {
+   SceneManager.LoadScene(0);
+}
+
+public int GetLevelNumber() {
+   return levelNumber;
+}
 
 public void PauseGame() {
    Time.timeScale = 0f;

@@ -16,6 +16,24 @@ public class TurretAmbushTrigger : MonoBehaviour
     private bool hasFired;
     private bool isFiring;
 
+    private void Awake()
+    {
+        // Auto-assign turret if not set - look for TurretController in parent or siblings
+        if (turret == null)
+        {
+            turret = GetComponentInParent<TurretController>();
+            if (turret == null)
+            {
+                // Try to find it in the same GameObject's siblings (if trigger is a child)
+                Transform parent = transform.parent;
+                if (parent != null)
+                {
+                    turret = parent.GetComponentInChildren<TurretController>();
+                }
+            }
+        }
+    }
+
     private void OnTriggerEnter2D(Collider2D other)
     {
         if (onlyOnce && hasFired) return;
@@ -42,7 +60,14 @@ public class TurretAmbushTrigger : MonoBehaviour
         yield return new WaitForSeconds(delay);
 
         // Double-check game is still running before firing
-        if (turret != null && Lander.Instance != null && Lander.Instance.IsInNormalState())
+        if (turret == null)
+        {
+            Debug.LogError($"TurretAmbushTrigger on {gameObject.name}: turret reference is null! Make sure the turret is assigned in the Inspector.", this);
+            isFiring = false;
+            yield break;
+        }
+
+        if (Lander.Instance != null && Lander.Instance.IsInNormalState())
         {
             turret.Fire();
             hasFired = true;
