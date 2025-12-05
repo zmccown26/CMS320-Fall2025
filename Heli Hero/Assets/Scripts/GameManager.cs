@@ -2,15 +2,17 @@ using System;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using System.Collections.Generic;
+using Unity.Cinemachine;
 public class GameManager : MonoBehaviour {
 
 public static GameManager Instance { get; private set; }
 
 
 [SerializeField] private List<GameLevel> gameLevelList;
+[SerializeField] private CinemachineCamera cinemachineCamera;
 
 
-private static int levelNumber =1;
+private static int levelNumber = 1;
 
 
 public event System.EventHandler OnGamePaused;
@@ -30,7 +32,7 @@ private void Start(){
    Lander.Instance.OnStateChanged += Lander_OnStateChanged;
 
    GameInput.Instance.OnMenuButtonPressed += GameInput_OnMenuButtonPressed;
-   LoadCurrentScene();
+   LoadCurrentLevel();
 }
 
 private void GameInput_OnMenuButtonPressed(object sender, System.EventArgs e){
@@ -39,20 +41,27 @@ private void GameInput_OnMenuButtonPressed(object sender, System.EventArgs e){
 
 private void Lander_OnStateChanged(object sender, Lander.OnStateChangedEventArgs e){
    isTimerActive = e.state == Lander.State.Normal;
-}
 
+   if(e.state == Lander.State.Normal){
+      cinemachineCamera.Target.TrackingTarget = Lander.Instance.transform;
+      CinemachineCameraZoom2D.Instance.SetNormalOrthographicSize();
+
+}
+}
 private void Update(){
    if(isTimerActive){
       time += Time.deltaTime;
    }
 }
 
-private void LoadCurrentScene(){
+private void LoadCurrentLevel(){
    foreach(GameLevel gameLevel in gameLevelList){
       if(gameLevel.GetLevelNumber() == levelNumber){
          
          GameLevel spawnedGameLevel = Instantiate(gameLevel, Vector3.zero, Quaternion.identity);
          Lander.Instance.transform.position = spawnedGameLevel.GetLanderStartPosition();
+         cinemachineCamera.Target.TrackingTarget = spawnedGameLevel.GetCameraStartTargetTransform();
+         CinemachineCameraZoom2D.Instance.SetTargetOrthographicSize(spawnedGameLevel.GetZoomedOutOrthographicSize());
       }
    }
 }
@@ -82,11 +91,11 @@ private void Lander_OnCoinPickup(object sender, System.EventArgs e){
 
 public void GoToNextLevel() {
    levelNumber++;
-   SceneManager.LoadScene(0);
+   SceneManager.LoadScene(1);
 }
 
 public void RetryLevel() {
-   SceneManager.LoadScene(0);
+   SceneManager.LoadScene(1);
 }
 
 public int GetLevelNumber() {
