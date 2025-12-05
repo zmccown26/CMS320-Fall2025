@@ -39,11 +39,14 @@ public class LandedUI : MonoBehaviour {
             nextButtonClickAction = GameManager.Instance.RetryLevel;
         }
 
+        // Combine landing score with coins already collected
+        int totalScore = GameManager.Instance.GetScore() + e.score;
+        
         statsTextMesh.text =
             Mathf.Round(e.landingSpeed * 2f) + "\n" +
             Mathf.Round(e.dotVector * 100f) + "%\n" +
             "x" + e.scoreMultiplier + "\n" +
-            e.score;
+            totalScore;
 
         Show();
     }

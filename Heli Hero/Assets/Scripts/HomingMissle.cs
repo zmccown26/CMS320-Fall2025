@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody2D), typeof(Collider2D))]
@@ -15,6 +16,7 @@ public class HomingMissile : MonoBehaviour
     private Rigidbody2D rb;
     private Transform target;
     private bool hasExploded = false;
+    private Coroutine lifetimeCoroutine;
 
     private void Awake()
     {
@@ -26,9 +28,8 @@ public class HomingMissile : MonoBehaviour
         if (Lander.Instance != null)
             target = Lander.Instance.transform;
 
-        // Replace raw Destroy call with delayed explosion
-        Invoke(nameof(Explode), lifeTime);
-        Debug.Log($"[HomingMissile] Lifetime timer started. Will explode in {lifeTime} seconds.", this);
+        // Start lifetime coroutine
+        lifetimeCoroutine = StartCoroutine(LifetimeCountdown());
     }
 
     private void FixedUpdate()
@@ -77,13 +78,27 @@ public class HomingMissile : MonoBehaviour
         }
     }
 
+    private IEnumerator LifetimeCountdown()
+    {
+        yield return new WaitForSeconds(lifeTime);
+        
+        // Time's up - explode
+        if (!hasExploded)
+        {
+            Explode();
+        }
+    }
+
     private void Explode()
     {
         if (hasExploded) return;
         hasExploded = true;
 
-        // Cancel pending invoke if this came from collision first
-        CancelInvoke(nameof(Explode));
+        // Stop the lifetime coroutine if it's still running
+        if (lifetimeCoroutine != null)
+        {
+            StopCoroutine(lifetimeCoroutine);
+        }
 
         if (explosionPrefab != null)
         {

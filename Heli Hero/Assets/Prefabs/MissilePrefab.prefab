@@ -182,4 +182,4 @@ MonoBehaviour:
   rotateSpeed: 220
   lifeTime: 6
   explosionPrefab: {fileID: 7943279738465366301, guid: b251033eee24c42b8b3d4cbff26273de, type: 3}
-  explodeOnGround: 0
+  explodeOnGround: 1

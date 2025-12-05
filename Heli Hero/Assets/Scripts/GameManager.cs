@@ -45,8 +45,7 @@ private void Lander_OnStateChanged(object sender, Lander.OnStateChangedEventArgs
    if(e.state == Lander.State.Normal){
       cinemachineCamera.Target.TrackingTarget = Lander.Instance.transform;
       CinemachineCameraZoom2D.Instance.SetNormalOrthographicSize();
-
-}
+      }
 }
 private void Update(){
    if(isTimerActive){
@@ -58,12 +57,15 @@ private void LoadCurrentLevel(){
    foreach(GameLevel gameLevel in gameLevelList){
       if(gameLevel.GetLevelNumber() == levelNumber){
          
-         GameLevel spawnedGameLevel = Instantiate(gameLevel, Vector3.zero, Quaternion.identity);
+         GameLevel spawnedGameLevel = Instantiate(gameLevel.gameObject, Vector3.zero, Quaternion.identity).GetComponent<GameLevel>();
          Lander.Instance.transform.position = spawnedGameLevel.GetLanderStartPosition();
          cinemachineCamera.Target.TrackingTarget = spawnedGameLevel.GetCameraStartTargetTransform();
          CinemachineCameraZoom2D.Instance.SetTargetOrthographicSize(spawnedGameLevel.GetZoomedOutOrthographicSize());
+         return; // Found and loaded the level
       }
    }
+   // If level not found, go back to level 1 or show error
+   Debug.LogWarning($"Level {levelNumber} not found in gameLevelList. Make sure Level_{levelNumber:D2} prefab is added to the list in GameManager.");
 }
 
  public void Lander_OnLanded(object sender, Lander.OnLandedEventArgs e){
@@ -90,12 +92,27 @@ private void Lander_OnCoinPickup(object sender, System.EventArgs e){
  }
 
 public void GoToNextLevel() {
+   // If we're on level 3, go to main menu instead of trying to load level 4
+   if(levelNumber >= 3) {
+      levelNumber = 0; // Reset to level 1 for next playthrough
+      score = 0; // Reset score
+      time = 0f; // Reset time
+      SceneLoader.LoadScene(SceneLoader.Scene.MainMenu);
+      return;
+   }
+   
    levelNumber++;
-   SceneManager.LoadScene(1);
+   score = 0; // Reset score for next level
+   time = 0f; // Reset time for next level
+   // Reload the current scene, which will call LoadCurrentLevel() to load the correct prefab
+   SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
 }
 
 public void RetryLevel() {
-   SceneManager.LoadScene(1);
+   score = 0; // Reset score
+   time = 0f; // Reset time
+   // Reload the current scene, which will call LoadCurrentLevel() to load the correct prefab for current levelNumber
+   SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
 }
 
 public int GetLevelNumber() {
