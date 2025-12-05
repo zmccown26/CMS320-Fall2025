@@ -221,4 +221,25 @@ public class Lander : MonoBehaviour {
         }
         return landerRigidbody2D.linearVelocity.y;
     }
+
+    public bool IsInNormalState() {
+        return state == State.Normal;
+    }
+
+    public void CrashFromHazard() {
+    // Avoid double-firing if already game over
+    if (state == State.GameOver) return;
+
+    Debug.Log("Crashed from hazard (missile/turret)");
+
+    OnLanded?.Invoke(this, new OnLandedEventArgs {
+        landingType = LandingType.WrongLandingArea, // reuse existing type
+        dotVector = 0f,
+        landingSpeed = 0f,
+        scoreMultiplier = 0,
+        score = 0,
+    });
+
+    setState(State.GameOver);
+}
 }
